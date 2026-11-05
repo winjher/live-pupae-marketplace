@@ -107,7 +107,8 @@
           <div><label>Email</label><input id="rEmail" type="email"></div>
           <div><label id="rOrgL">Company name</label><input id="rOrg"></div>
           <div><label>Address</label><input id="rAddr"></div>
-          <div><label>Country (PH = local, pesos and GCash)</label><input id="rCountry" value="PH"></div>
+          <div><label>Country</label><select id="rCountry" onchange="countryChanged('r')"></select>
+            <small id="rCurHint" class="muted"></small></div>
           <div id="taxWrap"><label>Tax status</label>
             <select id="rTax"><option value="nonvat">Non-VAT registered</option><option value="vat">VAT registered</option></select></div>
           <div><label>Username</label><input id="rUser" autocomplete="username"></div>
@@ -127,7 +128,7 @@
 <main id="app" class="hide"></main>
 
 <script>
-// ===== ERROR BAR (shows script errors on the page) =====
+// ===== ERROR BAR =====
 window.onerror = function (msg, src, line) {
   var b = document.getElementById('errBar');
   if (b) { b.textContent = 'Script error: ' + msg + ' (line ' + line + ')'; b.classList.remove('hide'); }
@@ -144,7 +145,7 @@ var store = {
 
 // ===== API CONNECTION =====
 // Inside Apps Script this page uses google.script.run.
-// On GitHub Pages it calls API_URL (your Apps Script /exec URL, from ?action=appUrl).
+// On GitHub Pages it calls API_URL (your Apps Script /exec URL).
 var API_URL = 'https://script.google.com/macros/s/AKfycbzznp42KJ4lAhmPSr0GuIThvRQhFePSLVHY5b_1xIOybeMxgckzBCPPxnapa-kgCLNN/exec';
 var IN_APPS_SCRIPT = (typeof google !== 'undefined') && !!(google && google.script && google.script.run);
 
@@ -173,8 +174,30 @@ function rpc(fn) {
     });
 }
 
+// ===== COUNTRIES (code|name; separated by semicolons) =====
+var COUNTRY_LIST = "PH|Philippines;AF|Afghanistan;AX|Åland Islands;AL|Albania;DZ|Algeria;AS|American Samoa;AD|Andorra;AO|Angola;AI|Anguilla;AQ|Antarctica;AG|Antigua and Barbuda;AR|Argentina;AM|Armenia;AW|Aruba;AU|Australia;AT|Austria;AZ|Azerbaijan;BS|Bahamas;BH|Bahrain;BD|Bangladesh;BB|Barbados;BY|Belarus;BE|Belgium;BZ|Belize;BJ|Benin;BM|Bermuda;BT|Bhutan;BO|Bolivia;BQ|Bonaire, Sint Eustatius and Saba;BA|Bosnia and Herzegovina;BW|Botswana;BV|Bouvet Island;BR|Brazil;IO|British Indian Ocean Territory;VG|British Virgin Islands;BN|Brunei;BG|Bulgaria;BF|Burkina Faso;BI|Burundi;CV|Cabo Verde;KH|Cambodia;CM|Cameroon;CA|Canada;KY|Cayman Islands;CF|Central African Republic;TD|Chad;CL|Chile;CN|China;CX|Christmas Island;CC|Cocos (Keeling) Islands;CO|Colombia;KM|Comoros;CG|Congo;CD|Congo (DR);CK|Cook Islands;CR|Costa Rica;CI|Côte d'Ivoire;HR|Croatia;CU|Cuba;CW|Curaçao;CY|Cyprus;CZ|Czechia;DK|Denmark;DJ|Djibouti;DM|Dominica;DO|Dominican Republic;EC|Ecuador;EG|Egypt;SV|El Salvador;GQ|Equatorial Guinea;ER|Eritrea;EE|Estonia;SZ|Eswatini;ET|Ethiopia;FK|Falkland Islands;FO|Faroe Islands;FJ|Fiji;FI|Finland;FR|France;GF|French Guiana;PF|French Polynesia;TF|French Southern Territories;GA|Gabon;GM|Gambia;GE|Georgia;DE|Germany;GH|Ghana;GI|Gibraltar;GR|Greece;GL|Greenland;GD|Grenada;GP|Guadeloupe;GU|Guam;GT|Guatemala;GG|Guernsey;GN|Guinea;GW|Guinea-Bissau;GY|Guyana;HT|Haiti;HM|Heard and McDonald Islands;VA|Holy See (Vatican);HN|Honduras;HK|Hong Kong;HU|Hungary;IS|Iceland;IN|India;ID|Indonesia;IR|Iran;IQ|Iraq;IE|Ireland;IM|Isle of Man;IL|Israel;IT|Italy;JM|Jamaica;JP|Japan;JE|Jersey;JO|Jordan;KZ|Kazakhstan;KE|Kenya;KI|Kiribati;XK|Kosovo;KW|Kuwait;KG|Kyrgyzstan;LA|Laos;LV|Latvia;LB|Lebanon;LS|Lesotho;LR|Liberia;LY|Libya;LI|Liechtenstein;LT|Lithuania;LU|Luxembourg;MO|Macao;MG|Madagascar;MW|Malawi;MY|Malaysia;MV|Maldives;ML|Mali;MT|Malta;MH|Marshall Islands;MQ|Martinique;MR|Mauritania;MU|Mauritius;YT|Mayotte;MX|Mexico;FM|Micronesia;MD|Moldova;MC|Monaco;MN|Mongolia;ME|Montenegro;MS|Montserrat;MA|Morocco;MZ|Mozambique;MM|Myanmar;NA|Namibia;NR|Nauru;NP|Nepal;NL|Netherlands;NC|New Caledonia;NZ|New Zealand;NI|Nicaragua;NE|Niger;NG|Nigeria;NU|Niue;NF|Norfolk Island;KP|North Korea;MK|North Macedonia;MP|Northern Mariana Islands;NO|Norway;OM|Oman;PK|Pakistan;PW|Palau;PS|Palestine;PA|Panama;PG|Papua New Guinea;PY|Paraguay;PE|Peru;PN|Pitcairn Islands;PL|Poland;PT|Portugal;PR|Puerto Rico;QA|Qatar;RE|Réunion;RO|Romania;RU|Russia;RW|Rwanda;BL|Saint Barthélemy;SH|Saint Helena;KN|Saint Kitts and Nevis;LC|Saint Lucia;MF|Saint Martin;PM|Saint Pierre and Miquelon;VC|Saint Vincent and the Grenadines;WS|Samoa;SM|San Marino;ST|Sao Tome and Principe;SA|Saudi Arabia;SN|Senegal;RS|Serbia;SC|Seychelles;SL|Sierra Leone;SG|Singapore;SX|Sint Maarten;SK|Slovakia;SI|Slovenia;SB|Solomon Islands;SO|Somalia;ZA|South Africa;GS|South Georgia and South Sandwich Islands;KR|South Korea;SS|South Sudan;ES|Spain;LK|Sri Lanka;SD|Sudan;SR|Suriname;SJ|Svalbard and Jan Mayen;SE|Sweden;CH|Switzerland;SY|Syria;TW|Taiwan;TJ|Tajikistan;TZ|Tanzania;TH|Thailand;TL|Timor-Leste;TG|Togo;TK|Tokelau;TO|Tonga;TT|Trinidad and Tobago;TN|Tunisia;TR|Türkiye;TM|Turkmenistan;TC|Turks and Caicos Islands;TV|Tuvalu;UG|Uganda;UA|Ukraine;AE|United Arab Emirates;GB|United Kingdom;US|United States;UM|US Minor Outlying Islands;VI|US Virgin Islands;UY|Uruguay;UZ|Uzbekistan;VU|Vanuatu;VE|Venezuela;VN|Vietnam;WF|Wallis and Futuna;EH|Western Sahara;YE|Yemen;ZM|Zambia;ZW|Zimbabwe";
+
+var COUNTRIES = COUNTRY_LIST.split(';').map(function (s) {
+  var i = s.indexOf('|');
+  return { code: s.slice(0, i), name: s.slice(i + 1) };
+});
+
+function countryOptions(selected) {
+  return COUNTRIES.map(function (c) {
+    var label = c.code === 'PH' ? 'Philippines (PH), local: pesos' : c.name + ' (' + c.code + '), dollars';
+    return '<option value="' + c.code + '"' + (c.code === selected ? ' selected' : '') + '>' + esc(label) + '</option>';
+  }).join('');
+}
+
+function isLocalCountry(c) { return ['PH', 'PHILIPPINES', ''].indexOf(String(c || '').trim().toUpperCase()) >= 0; }
+
+// Payment choices by buyer country
+var PAY_OPTIONS = {
+  local: [['GCASH', 'GCash'], ['PAYMAYA', 'PayMaya']],
+  intl:  [['STRIPE', 'Stripe (card)'], ['PAYMAYA', 'PayMaya']]
+};
+
 // ===== CONSTANTS =====
-var PAY_NOTE_PHP = 'Pay by GCash, then enter the 10 to 13 digit reference number from your receipt.';
 var KYC_LABELS = { id: 'Government-issued ID', permit: 'DENR / farm permit', license: 'Business license or permit' };
 var KYC_REQUIRED = { breeder: ['id', 'permit'], purchaser: ['id', 'license'], buyer: ['id'] };
 var TABS = {
@@ -199,8 +222,8 @@ var SPECIES_IMG = {
 
 // ===== STATE =====
 var token = null, S = null, tab = null, pollT = null;
-var spFilter = '';   // buyers and purchasers: species chosen with +
-var spPick = '';     // breeders: species pre-selected on Fresh Pupae
+var spFilter = '';
+var spPick = '';
 var cache = {};
 
 // ===== HELPERS =====
@@ -209,6 +232,7 @@ function esc(t) { return String(t === null || t === undefined ? '' : t).replace(
   return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 function peso(n) { return '₱' + (Number(n) || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function usd(n) { return '$' + (Number(n) || 0).toFixed(2); }
+function money(amount, cur) { return cur === 'USD' ? usd(amount) : peso(amount); }
 function short(s) { return String(s || '').replace('Butterfly-', ''); }
 function when(ms) { return ms ? new Date(ms).toLocaleString('en-PH', { timeZone: 'Asia/Manila', dateStyle: 'medium', timeStyle: 'short' }) : '-'; }
 function timeLeft(exp) { var h = Math.floor((exp - Date.now()) / 36e5); return h < 0 ? 'Expired' : Math.floor(h / 24) + 'd ' + (h % 24) + 'h left'; }
@@ -216,18 +240,13 @@ function liveOk(l) { return l.left > 0 && Date.now() < l.exp; }
 function role() { return S ? S.me.role : ''; }
 function verified() { return !!S && S.me.kyc === 'verified'; }
 function alertErr(e) { alert((e && e.message) || e); }
-
-// Local = Philippines (pesos, GCash). Everyone else sees dollars (Stripe or PayPal).
-function isLocalCountry(c) { return ['PH', 'PHILIPPINES', ''].indexOf(String(c || '').trim().toUpperCase()) >= 0; }
 function viewerIsLocal() { return !S || isLocalCountry(S.me.country); }
 
-/** amount is in its own currency ('PHP' or 'USD'). Local viewers see pesos, foreign viewers see dollars. */
+/** amount is in its own currency ('PHP' or 'USD'). Local viewers see pesos, others see dollars. */
 function showPrice(amount, nativeCur) {
   if (viewerIsLocal()) return peso(nativeCur === 'USD' ? amount * S.rate : amount);
   return usd(nativeCur === 'USD' ? amount : amount / S.rate);
 }
-/** Shows an amount in the currency it is paid in. */
-function money(amount, cur) { return cur === 'USD' ? usd(amount) : peso(amount); }
 
 function paint(id, html) {
   var el = $(id);
@@ -254,6 +273,14 @@ function regRoleChanged() {
   var r = $('rRole').value;
   $('rOrgL').textContent = r === 'purchaser' ? 'Company name' : 'Organization / school (optional)';
   $('taxWrap').classList.toggle('hide', r !== 'purchaser');
+}
+
+function countryChanged(prefix) {
+  var c = $(prefix + 'Country').value;
+  var local = isLocalCountry(c);
+  $(prefix + 'CurHint').textContent = local
+    ? 'Local: prices in pesos. You pay by GCash or PayMaya.'
+    : 'International: prices in US dollars. You pay by Stripe or PayMaya.';
 }
 
 async function doLogin() {
@@ -320,6 +347,10 @@ async function refresh(quiet) {
 }
 
 window.addEventListener('load', async function () {
+  // Fill the country list and the registration currency hint.
+  $('rCountry').innerHTML = countryOptions('PH');
+  countryChanged('r');
+
   var t = store.get('bpToken');
   if (!t) return;
   token = t;
@@ -465,8 +496,8 @@ function renderHome() {
   }
   paint('app', '<div class="panel"><h2>Welcome</h2><p>' +
     (viewerIsLocal()
-      ? 'Browse purchaser catalogs in pesos and pay by GCash.'
-      : 'Browse purchaser catalogs in US dollars and pay by Stripe or PayPal.') +
+      ? 'Browse purchaser catalogs in pesos. Pay by GCash or PayMaya.'
+      : 'Browse purchaser catalogs in US dollars. Pay by Stripe or PayMaya.') +
     '</p><button class="btn" onclick="go(\'catalog\')">Open catalog</button></div>');
 }
 
@@ -528,7 +559,7 @@ async function toggleListing(id, on) {
   catch (e) { alertErr(e); }
 }
 
-// ===== BREEDER: PRICES (buyers get the buyer catalog instead) =====
+// ===== BREEDER: PRICES (buyers get the purchaser catalog instead) =====
 function renderCatalog() {
   if (role() === 'buyer') return renderBuyerCatalog();
   var p = S.prices || {};
@@ -559,6 +590,13 @@ async function savePrice(s) {
 }
 
 // ===== BUYER: PURCHASER CATALOG =====
+function payOptionsHtml(id) {
+  var list = viewerIsLocal() ? PAY_OPTIONS.local : PAY_OPTIONS.intl;
+  return '<select id="pm_' + esc(id) + '">' + list.map(function (o) {
+    return '<option value="' + o[0] + '">' + esc(o[1]) + '</option>';
+  }).join('') + '</select>';
+}
+
 function renderBuyerCatalog() {
   var active = S.contracts.filter(function (c) { return c.status === 'active'; });
   var contractOpts = '<option value="">No contract (one-off order)</option>' +
@@ -566,24 +604,20 @@ function renderBuyerCatalog() {
       return '<option value="' + esc(c.id) + '">' + esc(c.id) + ' · from ' + esc(c.purchaser) + ' · min ' + c.monthlyMinQty + '/month</option>';
     }).join('');
   var list = catalogList();
-  var payMethodSelect = viewerIsLocal() ? '' :
-    '<select id="pm_PLACEHOLDER" class="hide"></select>';
   paint('app', '<div class="panel"><h2>Purchaser catalog</h2>' +
     '<p class="small muted">' + (viewerIsLocal()
-      ? 'Prices in pesos. You pay the purchaser by GCash.'
-      : 'Prices in US dollars. Choose Stripe or PayPal when you order.') +
+      ? 'Prices in pesos. Choose GCash or PayMaya when you order.'
+      : 'Prices in US dollars. Choose Stripe or PayMaya when you order.') +
     ' After you order, submit your payment reference under My Orders.</p>' +
     filterBar() +
     (list.length ? '' : '<p class="muted">No pupae available right now.</p>') +
     '<div class="grid">' + list.map(function (l) {
-      var methodBox = viewerIsLocal() ? '' :
-        '<select id="pm_' + esc(l.id) + '"><option value="stripe">Pay with Stripe</option><option value="paypal">Pay with PayPal</option></select>';
       return '<div class="card">' +
         '<h3 style="margin:0">' + esc(short(l.sp)) + '</h3>' +
         '<div class="small muted">From ' + esc(l.ownerOrg) + ' · ' + l.left + ' available · ' + esc(timeLeft(l.exp)) + '</div>' +
         '<div class="price">' + showPrice(l.price, 'USD') + ' / pupa</div>' +
         '<div class="row"><label style="margin:0">Qty <input id="bq_' + esc(l.id) + '" type="number" min="1" max="' + l.left + '" value="1" style="width:90px"></label></div>' +
-        methodBox +
+        '<label style="margin-top:6px">Payment method</label>' + payOptionsHtml(l.id) +
         '<select id="bc_' + esc(l.id) + '">' + contractOpts + '</select>' +
         '<button class="btn" onclick="orderBuyer(\'' + esc(l.id) + '\')">Order</button>' +
         '</div>';
@@ -592,10 +626,9 @@ function renderBuyerCatalog() {
 
 async function orderBuyer(id) {
   try {
-    var methodEl = $('pm_' + id);
     var oid = await rpc('placeOrder', token, id, $('bq_' + id).value, {
       contractId: $('bc_' + id).value,
-      payMethod: methodEl ? methodEl.value : ''
+      payMethod: $('pm_' + id).value
     });
     alert('Order ' + oid + ' placed. Pay as shown under My Orders, then submit the reference.');
     await refresh(true);
@@ -655,20 +688,24 @@ function taxBlock(o) {
 
 function payInstructions(o) {
   var p = o.payTo || {};
-  if (o.payCurrency === 'PHP') {
-    return 'Send <b>' + peso(o.amountDue) + '</b> by GCash to <b>' + esc(p.gcash || '(not set)') + '</b>' +
-      (p.name ? ' · ' + esc(p.name) : '') + '.';
+  if (o.payCode === 'STRIPE') {
+    return 'Pay <b>' + usd(o.amountDue) + '</b> by Stripe: <a href="' + esc(p.link || '#') + '" target="_blank" rel="noopener">open the payment link</a>, then enter the transaction ID from your receipt.';
   }
-  return 'Pay <b>' + usd(o.amountDue) + '</b> by ' + esc(o.payMethod || 'Stripe or PayPal') +
-    ': <a href="' + esc(p.link || '#') + '" target="_blank" rel="noopener">open the payment link</a>, then enter the transaction ID from your receipt.';
+  if (o.payCode === 'PAYMAYA') {
+    return 'Send <b>' + money(o.amountDue, o.payCurrency) + '</b> by PayMaya to <b>' + esc(p.paymaya || '(not set)') + '</b>' +
+      (p.name ? ' · ' + esc(p.name) : '') + ', then enter the reference number from your receipt.';
+  }
+  return 'Send <b>' + peso(o.amountDue) + '</b> by GCash to <b>' + esc(p.gcash || '(not set)') + '</b>' +
+    (p.name ? ' · ' + esc(p.name) : '') + ', then enter the 10 to 13 digit reference number.';
 }
 
 function orderActions(o) {
   var me = S.me.username;
   var a = '';
   if (o.buyer === me && o.status === 'Awaiting Payment') {
+    var ph = o.payCode === 'GCASH' ? 'GCash reference (10 to 13 digits)' : 'Reference or transaction ID';
     a += '<div class="small">' + payInstructions(o) + '</div>' +
-      '<div class="row"><input id="ref_' + esc(o.id) + '" placeholder="' + (o.payCurrency === 'PHP' ? 'GCash ref (13 digits)' : 'Transaction ID') + '" style="width:150px">' +
+      '<div class="row"><input id="ref_' + esc(o.id) + '" placeholder="' + ph + '" style="width:170px">' +
       '<button class="btn" onclick="payOrder(\'' + esc(o.id) + '\')">Submit</button>' +
       '<button class="btn sec" onclick="cancelOrder(\'' + esc(o.id) + '\')">Cancel</button></div>';
   }
@@ -716,10 +753,7 @@ function renderTools() {
 function renderSupply() {
   var list = catalogList();
   paint('app', '<div class="panel"><h2>Breeder catalog</h2>' +
-    '<p class="small muted">' + (viewerIsLocal()
-      ? 'Prices in pesos. You pay the breeder by GCash.'
-      : 'Prices in pesos. Breeders are paid in pesos by GCash.') +
-    ' Enter the US dollar price you will sell to buyers. Breeder prices are never shown to buyers.</p>' +
+    '<p class="small muted">Prices in pesos. Supply orders are paid to the breeder by GCash. Enter the US dollar price you will sell to buyers. Breeder prices are never shown to buyers.</p>' +
     filterBar() +
     (list.length ? '' : '<p class="muted">No fresh pupae available right now.</p>') +
     '<div class="grid">' + list.map(function (l) {
@@ -878,14 +912,16 @@ function renderProfile() {
     '<div><label>Email</label><input id="pEmail" value="' + esc(m.email) + '"></div>' +
     '<div><label>Organization</label><input id="pOrg" value="' + esc(m.org) + '"></div>' +
     '<div><label>Address</label><input id="pAddr" value="' + esc(m.address) + '"></div>' +
-    '<div><label>Country (PH = local, pesos and GCash)</label><input id="pCountry" value="' + esc(m.country) + '"></div>' +
+    '<div><label>Country</label><select id="pCountry" onchange="countryChanged(\'p\')">' + countryOptions(m.country) + '</select>' +
+    '<small id="pCurHint" class="muted"></small></div>' +
     (seller
-      ? '<div><label>GCash number (local payments)</label><input id="pGcash" value="' + esc(m.gcash) + '"></div>' +
-        '<div><label>Stripe payment link (foreign buyers)</label><input id="pStripe" value="' + esc(m.stripe) + '" placeholder="https://buy.stripe.com/..."></div>' +
-        '<div><label>PayPal link (foreign buyers)</label><input id="pPaypal" value="' + esc(m.paypal) + '" placeholder="https://paypal.me/..."></div>'
+      ? '<div><label>GCash number (receives local payments)</label><input id="pGcash" value="' + esc(m.gcash) + '"></div>' +
+        '<div><label>PayMaya number or link</label><input id="pPaymaya" value="' + esc(m.paymaya) + '"></div>' +
+        '<div><label>Stripe payment link (for foreign buyers)</label><input id="pStripe" value="' + esc(m.stripe) + '" placeholder="https://buy.stripe.com/..."></div>'
       : '') +
     '</div><p class="small muted">Username: ' + esc(m.username) + ' · KYC: ' + esc(m.kyc) + '</p>' +
     '<p class="note" id="pMsg"></p><button class="btn" onclick="saveProfile()">Save profile</button></div>');
+  countryChanged('p');
 }
 
 async function saveProfile() {
@@ -895,8 +931,8 @@ async function saveProfile() {
   };
   if ($('pGcash')) {
     body.gcash = $('pGcash').value;
+    body.paymaya = $('pPaymaya').value;
     body.stripe = $('pStripe').value;
-    body.paypal = $('pPaypal').value;
   }
   try {
     S.me = await rpc('updateProfile', token, body);

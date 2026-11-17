@@ -1,948 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>🦋 Butterfly Pupae Marketplace</title>
-<style>
-  :root { --p:#2f6b3f; --ph:#245330; --bg:#f4f7f4; --bd:#dfe6df; --gold:#e8b04a; --red:#c0392b; }
-  * { box-sizing:border-box; }
-  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; background:var(--bg); color:#222; font-size:15px; }
-  header { background:var(--p); color:#fff; padding:10px 16px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; position:sticky; top:0; z-index:50; }
-  header h1 { margin:0; font-size:1.15rem; }
-  .hdr { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-  #who { font-size:.8rem; opacity:.9; }
-  .errbar { background:#fff; color:var(--red); border-bottom:2px solid var(--red); padding:10px 14px; font-size:.85rem; word-break:break-word; }
-  nav.tabs { display:flex; gap:6px; flex-wrap:wrap; background:#fff; border-bottom:1px solid var(--bd); padding:8px 12px; position:sticky; top:54px; z-index:40; }
-  nav.tabs button { background:#fff; color:var(--p); border:1px solid var(--bd); padding:7px 12px; border-radius:20px; font-weight:600; font-size:.82rem; cursor:pointer; }
-  nav.tabs button.on { background:var(--p); color:#fff; border-color:var(--p); }
-  button { font:inherit; cursor:pointer; }
-  .btn { background:var(--p); color:#fff; border:none; padding:9px 14px; border-radius:6px; font-weight:600; font-size:.88rem; }
-  .btn:hover { background:var(--ph); }
-  .btn.sec { background:#fff; color:var(--p); border:1px solid var(--p); }
-  .btn.warn { background:var(--red); }
-  .btn.light { background:#fff; color:var(--p); border:none; padding:7px 12px; border-radius:6px; font-weight:600; }
-  .btn.wide { width:100%; }
-  main { max-width:1100px; margin:0 auto; padding:16px; }
-  .auth { max-width:460px; margin:20px auto; }
-  .panel { background:#fff; border:1px solid var(--bd); border-radius:10px; padding:16px; margin-bottom:16px; }
-  .panel h2 { margin:0 0 12px; font-size:1.05rem; color:var(--p); }
-  .panel h3 { margin:12px 0 8px; font-size:.95rem; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px; }
-  .card { background:#fff; border:1px solid var(--bd); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:6px; }
-  .tag { display:inline-block; font-size:.72rem; font-weight:700; padding:2px 7px; border-radius:10px; background:#e7f2ea; color:var(--p); }
-  .tag.warn { background:#fdecea; color:var(--red); }
-  .tag.gold { background:#fff4d6; color:#7a5a00; }
-  .price { font-size:1.15rem; font-weight:700; color:var(--p); }
-  .muted { color:#666; font-size:.85rem; }
-  .small { font-size:.8rem; }
-  .note { color:var(--red); font-size:.85rem; min-height:1em; }
-  .ok { color:var(--p); }
-  .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:6px 0; }
-  .form { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:10px; }
-  label { display:block; font-size:.82rem; font-weight:600; margin-bottom:4px; }
-  input, select, textarea { width:100%; padding:8px; border:1px solid var(--bd); border-radius:6px; font:inherit; font-size:.9rem; background:#fff; }
-  input[type=checkbox] { width:auto; }
-  .chk { display:flex; gap:8px; align-items:flex-start; font-weight:400; font-size:.88rem; margin:6px 0; }
-  .chk input { width:auto; margin-top:3px; }
-  .tw { overflow-x:auto; }
-  table { width:100%; border-collapse:collapse; font-size:.85rem; }
-  th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--bd); vertical-align:top; }
-  th { background:#f2f5f2; }
-  .hide { display:none !important; }
-  .block { border-left:3px solid var(--gold); background:#fffbf0; padding:10px; border-radius:6px; margin:8px 0; font-size:.88rem; }
-  @media (max-width:600px) { header h1 { font-size:1rem; } main { padding:10px; } }
-
-  .sec-title { font-size:1rem; font-weight:700; color:var(--p); text-align:center; margin:18px 0 10px; }
-  .sp-grid { list-style:none; padding:0; margin:0 0 12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; }
-  .sp-card { background:#fff; border:1px solid var(--bd); border-radius:10px; overflow:hidden; text-align:center; position:relative; }
-  .sp-img { width:100%; height:120px; background:#eef5ee; display:flex; align-items:center; justify-content:center; font-size:2.5rem; }
-  .sp-img img { width:100%; height:100%; object-fit:cover; }
-  .sp-name { font-weight:700; font-size:.9rem; padding:8px 8px 2px; }
-  .sp-count { font-size:.75rem; color:#666; padding:0 8px 10px; }
-  .add-btn { position:absolute; top:6px; right:6px; width:30px; height:30px; border-radius:50%; border:none; background:var(--p); color:#fff; font-size:1.1rem; font-weight:700; line-height:30px; padding:0; }
-  .add-btn:hover { background:var(--ph); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Butterfly Pupae Marketplace - LepVision Trade Platform</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Leaflet GIS Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    .chat-msg { margin-bottom: 8px; font-size: 14px; }
+    .chat-msg.me { text-align: right; color: #047857; }
+    .chat-msg .who { font-weight: bold; font-size: 11px; color: #64748b; }
+  </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
 
-<div id="errBar" class="errbar hide"></div>
-
-<header>
-  <h1>🦋 Butterfly Pupae Marketplace</h1>
-  <div id="hdrRight" class="hide hdr">
-    <span id="who"></span>
-    <button class="btn light" onclick="logout()">Log out</button>
-  </div>
-</header>
-
-<nav class="tabs hide" id="tabs"></nav>
-
-<!-- LOGIN / REGISTER -->
-<div id="authView">
-  <main>
-    <div class="panel auth">
-      <div class="row">
-        <button class="btn" id="tabLi" onclick="authTab('login')">Log in</button>
-        <button class="btn sec" id="tabRg" onclick="authTab('register')">Register</button>
+  <!-- Navigation Bar -->
+  <nav class="bg-emerald-800 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
+      <div class="flex items-center space-x-3">
+        <span class="text-2xl">🦋</span>
+        <span class="font-bold text-xl tracking-wide">LepVision Butterfly Exchange</span>
       </div>
-
-      <div id="fLogin">
-        <label>Username</label><input id="liUser" autocomplete="username">
-        <label style="margin-top:8px">Password</label>
-        <input id="liPass" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-        <p class="note" id="lMsg"></p>
-        <button class="btn wide" onclick="doLogin()">Log in</button>
+      <div id="navLinks" class="hidden md:flex space-x-4 items-center">
+        <!-- Rendered dynamically based on login state -->
       </div>
+    </div>
+  </nav>
 
-      <div id="fReg" class="hide">
-        <label>I am registering as</label>
-        <select id="rRole" onchange="regRoleChanged()">
-          <option value="purchaser">Purchaser (buy from breeders, sell to buyers)</option>
-          <option value="buyer">Buyer (local or foreign, buy from purchasers)</option>
-        </select>
-        <div class="form" style="margin-top:10px">
-          <div><label>Full name</label><input id="rName"></div>
-          <div><label>Phone</label><input id="rPhone" type="tel"></div>
-          <div><label>Email</label><input id="rEmail" type="email"></div>
-          <div><label id="rOrgL">Company name</label><input id="rOrg"></div>
-          <div><label>Address</label><input id="rAddr"></div>
-          <div><label>Country</label><select id="rCountry" onchange="countryChanged('r')"></select>
-            <small id="rCurHint" class="muted"></small></div>
-          <div id="taxWrap"><label>Tax status</label>
-            <select id="rTax"><option value="nonvat">Non-VAT registered</option><option value="vat">VAT registered</option></select></div>
-          <div><label>Username</label><input id="rUser" autocomplete="username"></div>
-          <div><label>Password (8+ characters)</label><input id="rPass" type="password" autocomplete="new-password"></div>
-          <div><label>Confirm password</label><input id="rPass2" type="password" autocomplete="new-password"></div>
-        </div>
-        <label class="chk"><input type="checkbox" id="rPrivacy">
-          I agree to the privacy notice: my ID and license documents are stored privately and used only for identity verification (RA 10173).</label>
-        <p class="note" id="rMsg"></p>
-        <button class="btn wide" onclick="doRegister()">Create account</button>
-        <p class="small muted">Breeder (farm) accounts are created by the farm owner.</p>
+  <!-- Main Application Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+    <div id="appRoot">
+      <!-- Dynamic Views Render Here -->
+      <div class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-700"></div>
+        <span class="ml-3 text-slate-600 font-medium">Loading LepVision Marketplace...</span>
       </div>
     </div>
   </main>
-</div>
 
-<main id="app" class="hide"></main>
-
-<script>
-// ===== ERROR BAR =====
-window.onerror = function (msg, src, line) {
-  var b = document.getElementById('errBar');
-  if (b) { b.textContent = 'Script error: ' + msg + ' (line ' + line + ')'; b.classList.remove('hide'); }
-  return false;
-};
-
-// ===== STORAGE THAT NEVER THROWS =====
-var mem = {};
-var store = {
-  get: function (k) { try { return sessionStorage.getItem(k); } catch (e) { return mem[k] || null; } },
-  set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) { mem[k] = v; } },
-  del: function (k) { try { sessionStorage.removeItem(k); } catch (e) { delete mem[k]; } }
-};
-
-// ===== API CONNECTION =====
-// Inside Apps Script this page uses google.script.run.
-// On GitHub Pages it calls API_URL (your Apps Script /exec URL).
-var API_URL = 'https://script.google.com/macros/s/AKfycbzznp42KJ4lAhmPSr0GuIThvRQhFePSLVHY5b_1xIOybeMxgckzBCPPxnapa-kgCLNN/exec';
-var IN_APPS_SCRIPT = (typeof google !== 'undefined') && !!(google && google.script && google.script.run);
-
-function rpc(fn) {
-  var args = Array.prototype.slice.call(arguments, 1);
-  if (IN_APPS_SCRIPT) {
-    return new Promise(function (resolve, reject) {
-      google.script.run
-        .withSuccessHandler(resolve)
-        .withFailureHandler(function (err) { reject(new Error((err && err.message) || String(err))); })
-        [fn].apply(null, args);
-    });
-  }
-  if (API_URL.indexOf('PASTE_') >= 0) return Promise.reject(new Error('Set API_URL in Index.html first.'));
-  return fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ fn: fn, args: args })
-  })
-    .then(function (r) { return r.text(); })
-    .then(function (t) {
-      var j;
-      try { j = JSON.parse(t); } catch (e) { throw new Error('Server did not return JSON. Check API_URL.'); }
-      if (j.error) throw new Error(j.error);
-      return j.result;
-    });
-}
-
-// ===== COUNTRIES (code|name; separated by semicolons) =====
-var COUNTRY_LIST = "PH|Philippines;AF|Afghanistan;AX|Åland Islands;AL|Albania;DZ|Algeria;AS|American Samoa;AD|Andorra;AO|Angola;AI|Anguilla;AQ|Antarctica;AG|Antigua and Barbuda;AR|Argentina;AM|Armenia;AW|Aruba;AU|Australia;AT|Austria;AZ|Azerbaijan;BS|Bahamas;BH|Bahrain;BD|Bangladesh;BB|Barbados;BY|Belarus;BE|Belgium;BZ|Belize;BJ|Benin;BM|Bermuda;BT|Bhutan;BO|Bolivia;BQ|Bonaire, Sint Eustatius and Saba;BA|Bosnia and Herzegovina;BW|Botswana;BV|Bouvet Island;BR|Brazil;IO|British Indian Ocean Territory;VG|British Virgin Islands;BN|Brunei;BG|Bulgaria;BF|Burkina Faso;BI|Burundi;CV|Cabo Verde;KH|Cambodia;CM|Cameroon;CA|Canada;KY|Cayman Islands;CF|Central African Republic;TD|Chad;CL|Chile;CN|China;CX|Christmas Island;CC|Cocos (Keeling) Islands;CO|Colombia;KM|Comoros;CG|Congo;CD|Congo (DR);CK|Cook Islands;CR|Costa Rica;CI|Côte d'Ivoire;HR|Croatia;CU|Cuba;CW|Curaçao;CY|Cyprus;CZ|Czechia;DK|Denmark;DJ|Djibouti;DM|Dominica;DO|Dominican Republic;EC|Ecuador;EG|Egypt;SV|El Salvador;GQ|Equatorial Guinea;ER|Eritrea;EE|Estonia;SZ|Eswatini;ET|Ethiopia;FK|Falkland Islands;FO|Faroe Islands;FJ|Fiji;FI|Finland;FR|France;GF|French Guiana;PF|French Polynesia;TF|French Southern Territories;GA|Gabon;GM|Gambia;GE|Georgia;DE|Germany;GH|Ghana;GI|Gibraltar;GR|Greece;GL|Greenland;GD|Grenada;GP|Guadeloupe;GU|Guam;GT|Guatemala;GG|Guernsey;GN|Guinea;GW|Guinea-Bissau;GY|Guyana;HT|Haiti;HM|Heard and McDonald Islands;VA|Holy See (Vatican);HN|Honduras;HK|Hong Kong;HU|Hungary;IS|Iceland;IN|India;ID|Indonesia;IR|Iran;IQ|Iraq;IE|Ireland;IM|Isle of Man;IL|Israel;IT|Italy;JM|Jamaica;JP|Japan;JE|Jersey;JO|Jordan;KZ|Kazakhstan;KE|Kenya;KI|Kiribati;XK|Kosovo;KW|Kuwait;KG|Kyrgyzstan;LA|Laos;LV|Latvia;LB|Lebanon;LS|Lesotho;LR|Liberia;LY|Libya;LI|Liechtenstein;LT|Lithuania;LU|Luxembourg;MO|Macao;MG|Madagascar;MW|Malawi;MY|Malaysia;MV|Maldives;ML|Mali;MT|Malta;MH|Marshall Islands;MQ|Martinique;MR|Mauritania;MU|Mauritius;YT|Mayotte;MX|Mexico;FM|Micronesia;MD|Moldova;MC|Monaco;MN|Mongolia;ME|Montenegro;MS|Montserrat;MA|Morocco;MZ|Mozambique;MM|Myanmar;NA|Namibia;NR|Nauru;NP|Nepal;NL|Netherlands;NC|New Caledonia;NZ|New Zealand;NI|Nicaragua;NE|Niger;NG|Nigeria;NU|Niue;NF|Norfolk Island;KP|North Korea;MK|North Macedonia;MP|Northern Mariana Islands;NO|Norway;OM|Oman;PK|Pakistan;PW|Palau;PS|Palestine;PA|Panama;PG|Papua New Guinea;PY|Paraguay;PE|Peru;PN|Pitcairn Islands;PL|Poland;PT|Portugal;PR|Puerto Rico;QA|Qatar;RE|Réunion;RO|Romania;RU|Russia;RW|Rwanda;BL|Saint Barthélemy;SH|Saint Helena;KN|Saint Kitts and Nevis;LC|Saint Lucia;MF|Saint Martin;PM|Saint Pierre and Miquelon;VC|Saint Vincent and the Grenadines;WS|Samoa;SM|San Marino;ST|Sao Tome and Principe;SA|Saudi Arabia;SN|Senegal;RS|Serbia;SC|Seychelles;SL|Sierra Leone;SG|Singapore;SX|Sint Maarten;SK|Slovakia;SI|Slovenia;SB|Solomon Islands;SO|Somalia;ZA|South Africa;GS|South Georgia and South Sandwich Islands;KR|South Korea;SS|South Sudan;ES|Spain;LK|Sri Lanka;SD|Sudan;SR|Suriname;SJ|Svalbard and Jan Mayen;SE|Sweden;CH|Switzerland;SY|Syria;TW|Taiwan;TJ|Tajikistan;TZ|Tanzania;TH|Thailand;TL|Timor-Leste;TG|Togo;TK|Tokelau;TO|Tonga;TT|Trinidad and Tobago;TN|Tunisia;TR|Türkiye;TM|Turkmenistan;TC|Turks and Caicos Islands;TV|Tuvalu;UG|Uganda;UA|Ukraine;AE|United Arab Emirates;GB|United Kingdom;US|United States;UM|US Minor Outlying Islands;VI|US Virgin Islands;UY|Uruguay;UZ|Uzbekistan;VU|Vanuatu;VE|Venezuela;VN|Vietnam;WF|Wallis and Futuna;EH|Western Sahara;YE|Yemen;ZM|Zambia;ZW|Zimbabwe";
-
-var COUNTRIES = COUNTRY_LIST.split(';').map(function (s) {
-  var i = s.indexOf('|');
-  return { code: s.slice(0, i), name: s.slice(i + 1) };
-});
-
-function countryOptions(selected) {
-  return COUNTRIES.map(function (c) {
-    var label = c.code === 'PH' ? 'Philippines (PH), local: pesos' : c.name + ' (' + c.code + '), dollars';
-    return '<option value="' + c.code + '"' + (c.code === selected ? ' selected' : '') + '>' + esc(label) + '</option>';
-  }).join('');
-}
-
-function isLocalCountry(c) { return ['PH', 'PHILIPPINES', ''].indexOf(String(c || '').trim().toUpperCase()) >= 0; }
-
-// Payment choices by buyer country
-var PAY_OPTIONS = {
-  local: [['GCASH', 'GCash'], ['PAYMAYA', 'PayMaya']],
-  intl:  [['STRIPE', 'Stripe (card)'], ['PAYMAYA', 'PayMaya']]
-};
-
-// ===== CONSTANTS =====
-var KYC_LABELS = { id: 'Government-issued ID', permit: 'DENR / farm permit', license: 'Business license or permit' };
-var KYC_REQUIRED = { breeder: ['id', 'permit'], purchaser: ['id', 'license'], buyer: ['id'] };
-var TABS = {
-  breeder: [['home','Home'],['species','Species'],['fresh','Fresh Pupae'],['catalog','Prices'],['orders','Orders'],['tools','Breeder Tools'],['audit','Audit Trail'],['profile','Edit Profile']],
-  purchaser: [['home','Home'],['species','Species'],['supply','Breeder Catalog'],['stock','My Stock'],['orders','Orders'],['contracts','Contracts'],['ai','AI Quality Check'],['audit','Audit Trail'],['profile','Edit Profile']],
-  buyer: [['home','Home'],['species','Species'],['catalog','Purchaser Catalog'],['orders','My Orders'],['contracts','Contracts'],['audit','Audit Trail'],['profile','Edit Profile']]
-};
-
-// Species grouped like your original layout.
-var SPECIES_SECTIONS = [
-  { title: 'Section 1', species: ['Butterfly-Batwing', 'Butterfly-Clippers', 'Butterfly-Common Jay', 'Butterfly-Common Lime',
-    'Butterfly-Common Mime', 'Butterfly-Common Mormon', 'Butterfly-Emerald Swallowtail', 'Butterfly-Golden Birdwing'] },
-  { title: 'Section 2', species: ['Butterfly-Grey Glassy Tiger', 'Butterfly-Great Eggfly', 'Butterfly-Great Yellow Mormon',
-    'Butterfly-Paper Kite', 'Butterfly-Pink Rose', 'Butterfly-Plain Tiger', 'Butterfly-Red Lacewing', 'Butterfly-Scarlet Mormon'] },
-  { title: 'Section 3', species: ['Butterfly-Tailed Jay', 'Butterfly-Giant Silk Moth'] }
-];
-
-// Public photo link per species. Species without a link show the butterfly emoji.
-var SPECIES_IMG = {
-  // 'Butterfly-Batwing': 'https://drive.google.com/thumbnail?sz=w400&id=FILE_ID',
-};
-
-// ===== STATE =====
-var token = null, S = null, tab = null, pollT = null;
-var spFilter = '';
-var spPick = '';
-var cache = {};
-
-// ===== HELPERS =====
-function $(id) { return document.getElementById(id); }
-function esc(t) { return String(t === null || t === undefined ? '' : t).replace(/[&<>"']/g, function (c) {
-  return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-function peso(n) { return '₱' + (Number(n) || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-function usd(n) { return '$' + (Number(n) || 0).toFixed(2); }
-function money(amount, cur) { return cur === 'USD' ? usd(amount) : peso(amount); }
-function short(s) { return String(s || '').replace('Butterfly-', ''); }
-function when(ms) { return ms ? new Date(ms).toLocaleString('en-PH', { timeZone: 'Asia/Manila', dateStyle: 'medium', timeStyle: 'short' }) : '-'; }
-function timeLeft(exp) { var h = Math.floor((exp - Date.now()) / 36e5); return h < 0 ? 'Expired' : Math.floor(h / 24) + 'd ' + (h % 24) + 'h left'; }
-function liveOk(l) { return l.left > 0 && Date.now() < l.exp; }
-function role() { return S ? S.me.role : ''; }
-function verified() { return !!S && S.me.kyc === 'verified'; }
-function alertErr(e) { alert((e && e.message) || e); }
-function viewerIsLocal() { return !S || isLocalCountry(S.me.country); }
-
-/** amount is in its own currency ('PHP' or 'USD'). Local viewers see pesos, others see dollars. */
-function showPrice(amount, nativeCur) {
-  if (viewerIsLocal()) return peso(nativeCur === 'USD' ? amount * S.rate : amount);
-  return usd(nativeCur === 'USD' ? amount : amount / S.rate);
-}
-
-function paint(id, html) {
-  var el = $(id);
-  if (el && cache[id] !== html) { cache[id] = html; el.innerHTML = html; }
-}
-function readFile(f) {
-  return new Promise(function (res, rej) {
-    var r = new FileReader();
-    r.onload = function () { res(r.result); };
-    r.onerror = function () { rej(new Error('Could not read the file.')); };
-    r.readAsDataURL(f);
-  });
-}
-
-// ===== AUTH =====
-function authTab(t) {
-  $('fLogin').classList.toggle('hide', t !== 'login');
-  $('fReg').classList.toggle('hide', t !== 'register');
-  $('tabLi').className = t === 'login' ? 'btn' : 'btn sec';
-  $('tabRg').className = t === 'register' ? 'btn' : 'btn sec';
-}
-
-function regRoleChanged() {
-  var r = $('rRole').value;
-  $('rOrgL').textContent = r === 'purchaser' ? 'Company name' : 'Organization / school (optional)';
-  $('taxWrap').classList.toggle('hide', r !== 'purchaser');
-}
-
-function countryChanged(prefix) {
-  var c = $(prefix + 'Country').value;
-  var local = isLocalCountry(c);
-  $(prefix + 'CurHint').textContent = local
-    ? 'Local: prices in pesos. You pay by GCash or PayMaya.'
-    : 'International: prices in US dollars. You pay by Stripe or PayMaya.';
-}
-
-async function doLogin() {
-  var u = $('liUser').value.trim().toLowerCase(), p = $('liPass').value, m = $('lMsg');
-  if (!u || !p) { m.textContent = 'Enter your username and password.'; return; }
-  m.textContent = 'Signing in…';
-  try {
-    var r = await rpc('login', '', u, p, { mode: 'login' });
-    if (!r.ok) { m.textContent = r.msg; return; }
-    await startSession(r.token);
-  } catch (e) { m.textContent = e.message; }
-}
-
-async function doRegister() {
-  var m = $('rMsg');
-  if (!$('rPrivacy').checked) { m.textContent = 'Please accept the privacy notice.'; return; }
-  if ($('rPass').value !== $('rPass2').value) { m.textContent = 'Passwords do not match.'; return; }
-  var role = $('rRole').value, u = $('rUser').value.trim().toLowerCase();
-  m.textContent = 'Creating account…';
-  try {
-    var r = await rpc('login', role, u, $('rPass').value, {
-      mode: 'register', name: $('rName').value, phone: $('rPhone').value, email: $('rEmail').value,
-      org: $('rOrg').value, addr: $('rAddr').value, country: $('rCountry').value, taxStatus: $('rTax').value
-    });
-    if (!r.ok) { m.textContent = r.msg; return; }
-    await startSession(r.token);
-  } catch (e) { m.textContent = e.message; }
-}
-
-async function startSession(t) {
-  token = t;
-  store.set('bpToken', t);
-  if (await refresh(false)) enterApp();
-}
-
-function enterApp() {
-  $('authView').classList.add('hide');
-  $('hdrRight').classList.remove('hide');
-  $('tabs').classList.remove('hide');
-  $('app').classList.remove('hide');
-  ['liPass', 'rPass', 'rPass2'].forEach(function (i) { $(i).value = ''; });
-  go(tab || 'home');
-  if (!pollT) pollT = setInterval(function () { refresh(true); }, 20000);
-}
-
-async function logout() {
-  try { if (token) await rpc('logout', token); } catch (e) {}
-  store.del('bpToken');
-  location.reload();
-}
-
-// ===== DATA =====
-async function refresh(quiet) {
-  try {
-    S = await rpc('getState', token);
-  } catch (e) {
-    if (/log in again|expired/i.test(e.message)) { store.del('bpToken'); location.reload(); return false; }
-    if (!quiet) alertErr(e);
-    return false;
-  }
-  $('who').textContent = S.me.username + ' · ' + S.me.role + (verified() ? '' : ' · KYC ' + S.me.kyc);
-  if (tab) render();
-  return true;
-}
-
-window.addEventListener('load', async function () {
-  // Fill the country list and the registration currency hint.
-  $('rCountry').innerHTML = countryOptions('PH');
-  countryChanged('r');
-
-  var t = store.get('bpToken');
-  if (!t) return;
-  token = t;
-  if (await refresh(true)) enterApp();
-  else { store.del('bpToken'); token = null; }
-});
-
-// ===== NAVIGATION =====
-function buildTabs() {
-  var items = verified() ? (TABS[role()] || []) : [];
-  $('tabs').innerHTML = items.map(function (x) {
-    return '<button class="' + (x[0] === tab ? 'on' : '') + '" onclick="go(\'' + x[0] + '\')">' + x[1] + '</button>';
-  }).join('');
-}
-
-function go(t) {
-  tab = t;
-  Object.keys(cache).forEach(function (k) { delete cache[k]; });
-  buildTabs();
-  render();
-}
-
-function render() {
-  if (!S || !tab) return;
-  buildTabs();
-  if (!verified()) { renderKyc(); return; }
-  var map = {
-    home: renderHome, species: renderSpecies, fresh: renderFresh, catalog: renderCatalog,
-    orders: renderOrders, tools: renderTools, audit: renderAudit, profile: renderProfile,
-    supply: renderSupply, stock: renderStock, contracts: renderContracts, ai: renderAi
-  };
-  (map[tab] || renderHome)();
-}
-
-// ===== KYC GATE =====
-function renderKyc() {
-  var latest = {};
-  (S.kycDocs || []).forEach(function (k) { latest[k.docType] = k; });
-  var tagFor = function (st) {
-    if (st === 'pending') return '<span class="tag gold">Under review</span>';
-    if (st === 'verified') return '<span class="tag">Approved</span>';
-    if (st === 'rejected') return '<span class="tag warn">Rejected</span>';
-    return '<span class="tag">Not uploaded</span>';
-  };
-  var docs = (KYC_REQUIRED[role()] || []).map(function (d) {
-    var k = latest[d];
-    var canUpload = !k || k.status === 'rejected';
-    return '<div class="panel" style="margin-bottom:10px">' +
-      '<div class="row"><b style="flex:1">' + esc(KYC_LABELS[d]) + '</b>' + tagFor(k ? k.status : '') + '</div>' +
-      (k && k.status === 'rejected' ? '<div class="block">Reason: ' + esc(k.note || 'Please upload a clearer copy.') + '</div>' : '') +
-      (canUpload ? '<input type="file" accept="image/*,application/pdf" onchange="uploadKyc(\'' + d + '\',this)">' : '') +
-      '</div>';
-  }).join('');
-  var statusText = { none: 'Not submitted', pending: 'Under review', rejected: 'Rejected, please upload the documents again', verified: 'Verified' }[S.me.kyc] || S.me.kyc;
-  paint('app', '<div class="panel" style="max-width:560px;margin:0 auto">' +
-    '<h2>Identity verification (KYC)</h2>' +
-    '<p class="muted">Account status: <b>' + esc(statusText) + '</b>. You can use the marketplace once every required document is approved.</p>' +
-    docs +
-    '<p class="small muted">Files are stored in a private folder that only the marketplace owner can open.</p></div>');
-}
-
-async function uploadKyc(docType, input) {
-  var f = input.files[0];
-  if (!f) return;
-  if (f.size > 5 * 1024 * 1024) { alert('Please choose a file under 5 MB.'); input.value = ''; return; }
-  try {
-    await rpc('submitKyc', token, docType, await readFile(f));
-    alert('Uploaded. An administrator will review it.');
-    await refresh(true);
-  } catch (e) { alertErr(e); }
-}
-
-// ===== SPECIES CARDS =====
-function spCount(s) {
-  if (role() === 'breeder') {
-    var n = S.lots.filter(function (l) { return l.sp === s && l.grade === 'good' && liveOk(l); }).length;
-    return n ? n + ' live listing(s)' : 'No live listing';
-  }
-  var m = S.catalog.filter(function (l) { return l.sp === s; }).length;
-  return m ? m + ' available' : 'None available';
-}
-
-function spCard(s) {
-  var img = SPECIES_IMG[s] ? '<img src="' + esc(SPECIES_IMG[s]) + '" alt="' + esc(short(s)) + '">' : '🦋';
-  return '<li class="sp-card">' +
-    '<div class="sp-img">' + img + '</div>' +
-    '<button class="add-btn" aria-label="Add ' + esc(short(s)) + '" onclick="speciesAdd(\'' + esc(s) + '\')">+</button>' +
-    '<div class="sp-name">' + esc(short(s)) + '</div>' +
-    '<div class="sp-count">' + esc(spCount(s)) + '</div>' +
-    '</li>';
-}
-
-function renderSpecies() {
-  var intro = role() === 'breeder'
-    ? 'Tap + to post fresh pupae of that species.'
-    : 'Tap + to see the available pupae of that species.';
-  var sections = SPECIES_SECTIONS.map(function (sec) {
-    return '<h5 class="sec-title">' + esc(sec.title) + '</h5>' +
-      '<ul class="sp-grid">' + sec.species.map(spCard).join('') + '</ul>';
-  }).join('');
-  paint('app', '<div class="panel"><h2>Butterfly species</h2><p class="small muted">' + intro + '</p>' + sections + '</div>');
-}
-
-function speciesAdd(s) {
-  if (role() === 'breeder') { spPick = s; go('fresh'); return; }
-  spFilter = s;
-  go(role() === 'purchaser' ? 'supply' : 'catalog');
-}
-
-function filterBar() {
-  return spFilter
-    ? '<div class="block">Showing ' + esc(short(spFilter)) + ' · <button class="btn light" onclick="clearSpFilter()">Show all</button></div>'
-    : '';
-}
-
-function clearSpFilter() { spFilter = ''; render(); }
-
-function catalogList() {
-  return spFilter ? S.catalog.filter(function (l) { return l.sp === spFilter; }) : S.catalog;
-}
-
-// ===== HOME =====
-function renderHome() {
-  var r = role();
-  if (r === 'breeder') {
-    var live = S.lots.filter(liveOk).length;
-    var sold = S.orders.filter(function (o) { return o.status === 'Confirmed' || o.status === 'Delivered'; }).length;
-    paint('app', '<div class="panel"><h2>Farm dashboard</h2>' +
-      '<p>' + live + ' live listing(s) · ' + sold + ' confirmed order(s)</p>' +
-      '<div class="row"><button class="btn" onclick="go(\'fresh\')">Post fresh pupae</button>' +
-      '<button class="btn sec" onclick="go(\'catalog\')">Set prices</button></div></div>');
-    return;
-  }
-  if (r === 'purchaser') {
-    var stock = S.lots.filter(function (l) { return l.grade === 'good' && l.active; }).length;
-    var pending = S.lots.filter(function (l) { return l.grade === 'pending'; }).length;
-    var active = S.contracts.filter(function (c) { return c.status === 'active'; }).length;
-    paint('app', '<div class="panel"><h2>Purchaser dashboard</h2>' +
-      '<p>' + stock + ' listing(s) live for buyers · ' + pending + ' stock awaiting quality check · ' + active + ' active contract(s)</p>' +
-      '<div class="row"><button class="btn" onclick="go(\'supply\')">Buy from breeders</button>' +
-      '<button class="btn sec" onclick="go(\'ai\')">Quality check</button></div></div>');
-    return;
-  }
-  paint('app', '<div class="panel"><h2>Welcome</h2><p>' +
-    (viewerIsLocal()
-      ? 'Browse purchaser catalogs in pesos. Pay by GCash or PayMaya.'
-      : 'Browse purchaser catalogs in US dollars. Pay by Stripe or PayMaya.') +
-    '</p><button class="btn" onclick="go(\'catalog\')">Open catalog</button></div>');
-}
-
-// ===== BREEDER: POST & LISTINGS =====
-function renderFresh() {
-  var hasPrices = S.prices && Object.keys(S.prices).length;
-  var opts = S.species.map(function (s) {
-    return '<option value="' + esc(s) + '" ' + (s === spPick ? 'selected' : '') + '>' + esc(short(s)) + '</option>';
-  }).join('');
-  paint('app', '<div class="panel"><h2>Post fresh pupae</h2>' +
-    (hasPrices ? '' : '<p class="note">Set your prices first (Prices tab).</p>') +
-    '<div class="form">' +
-    '<div><label>Species</label><select id="fSp">' + opts + '</select></div>' +
-    '<div><label>Exact number of pupae</label><input id="fQty" type="number" min="1"></div>' +
-    '<div><label>QA notes (optional)</label><input id="fNotes"></div>' +
-    '</div>' +
-    '<h3>Quality assurance, all required</h3>' +
-    '<label class="chk"><input type="checkbox" class="qa"> Healthy and firm, no discoloration or mold</label>' +
-    '<label class="chk"><input type="checkbox" class="qa"> No deformities or damage; cremaster intact</label>' +
-    '<label class="chk"><input type="checkbox" class="qa"> Correct size and weight for the species</label>' +
-    '<label class="chk"><input type="checkbox" class="qa"> Freshly pupated, within 2 days</label>' +
-    '<p class="small muted">Listings are valid for 2 days and cannot be sold after they mature.</p>' +
-    '<p class="note" id="fMsg"></p>' +
-    '<button class="btn" onclick="postFresh()">Post for 2 days</button></div>' +
-    '<div class="panel"><h2>My listings</h2><div class="tw">' + listingsTable(S.lots) + '</div></div>');
-  spPick = '';
-}
-
-function listingsTable(lots) {
-  if (!lots.length) return '<p class="muted">No listings yet.</p>';
-  return '<table><thead><tr><th>Species</th><th>Left / posted</th><th>Price</th><th>Grade</th><th>Status</th><th></th></tr></thead><tbody>' +
-    lots.slice().sort(function (a, b) { return b.created - a.created; }).map(function (l) {
-      var status = l.grade === 'pending' ? 'Awaiting grading'
-        : l.grade === 'rejected' ? 'Rejected'
-        : Date.now() >= l.exp ? 'Expired'
-        : (l.active ? 'Live, ' + timeLeft(l.exp) : 'Off');
-      var btn = liveOk(l) && l.grade === 'good'
-        ? '<button class="btn sec" onclick="toggleListing(\'' + esc(l.id) + '\',' + (!l.active) + ')">' + (l.active ? 'Disable' : 'Enable') + '</button>' : '';
-      return '<tr><td>' + esc(short(l.sp)) + '</td><td>' + l.left + ' / ' + l.qty + '</td><td>' + money(l.price, l.currency) + '</td>' +
-        '<td><span class="tag ' + (l.grade === 'rejected' ? 'warn' : '') + '">' + esc(l.grade) + '</span></td>' +
-        '<td>' + esc(status) + '</td><td>' + btn + '</td></tr>';
-    }).join('') + '</tbody></table>';
-}
-
-async function postFresh() {
-  var m = $('fMsg');
-  m.textContent = '';
-  var qa = Array.prototype.map.call(document.querySelectorAll('.qa'), function (c) { return c.checked; });
-  try {
-    await rpc('postLot', token, { sp: $('fSp').value, qty: $('fQty').value, notes: $('fNotes').value, qa: qa });
-    alert('Posted. Buyers can see it for 2 days or until sold.');
-    await refresh(true);
-    go('fresh');
-  } catch (e) { m.textContent = e.message; }
-}
-
-async function toggleListing(id, on) {
-  try { await rpc('setListingActive', token, id, on); await refresh(true); }
-  catch (e) { alertErr(e); }
-}
-
-// ===== BREEDER: PRICES (buyers get the purchaser catalog instead) =====
-function renderCatalog() {
-  if (role() === 'buyer') return renderBuyerCatalog();
-  var p = S.prices || {};
-  var cards = S.species.map(function (s) {
-    var e = p[s];
-    var pend = e && e.pending ? '<div class="block">Price change to ' + peso(e.pending.price) + ' takes effect ' + esc(when(e.pending.at)) + '.</div>' : '';
-    return '<div class="card">' +
-      '<h3 style="margin:0">' + esc(short(s)) + ' ' + (e && e.flood ? '<span class="tag gold">FLOOD</span>' : '') + '</h3>' +
-      '<div class="price">' + (e ? peso(e.price) : 'No price set') + ' <span class="muted small">/ pupa</span></div>' +
-      pend +
-      '<div class="row"><input id="p_' + esc(s) + '" type="number" min="0" step="0.5" placeholder="New price">' +
-      '<label class="chk" style="margin:0"><input type="checkbox" id="f_' + esc(s) + '" ' + (e && e.flood ? 'checked' : '') + '> Flood</label></div>' +
-      '<button class="btn sec" onclick="savePrice(\'' + esc(s) + '\')">Save price</button>' +
-      '</div>';
-  }).join('');
-  paint('app', '<div class="panel"><h2>Your prices (pesos)</h2>' +
-    '<p class="small muted">Breeder prices are never shown to buyers. A price change on a flooded species takes effect after ' + S.noticeDays + ' days.</p>' +
-    '<div class="grid">' + cards + '</div></div>');
-}
-
-async function savePrice(s) {
-  var v = $('p_' + s).value, flood = $('f_' + s).checked;
-  var cur = S.prices && S.prices[s];
-  var price = v === '' ? (cur ? cur.price : null) : Number(v);
-  if (price === null) { alert('Enter a price.'); return; }
-  try { await rpc('setPrice', token, s, price, flood); await refresh(true); }
-  catch (e) { alertErr(e); }
-}
-
-// ===== BUYER: PURCHASER CATALOG =====
-function payOptionsHtml(id) {
-  var list = viewerIsLocal() ? PAY_OPTIONS.local : PAY_OPTIONS.intl;
-  return '<select id="pm_' + esc(id) + '">' + list.map(function (o) {
-    return '<option value="' + o[0] + '">' + esc(o[1]) + '</option>';
-  }).join('') + '</select>';
-}
-
-function renderBuyerCatalog() {
-  var active = S.contracts.filter(function (c) { return c.status === 'active'; });
-  var contractOpts = '<option value="">No contract (one-off order)</option>' +
-    active.map(function (c) {
-      return '<option value="' + esc(c.id) + '">' + esc(c.id) + ' · from ' + esc(c.purchaser) + ' · min ' + c.monthlyMinQty + '/month</option>';
-    }).join('');
-  var list = catalogList();
-  paint('app', '<div class="panel"><h2>Purchaser catalog</h2>' +
-    '<p class="small muted">' + (viewerIsLocal()
-      ? 'Prices in pesos. Choose GCash or PayMaya when you order.'
-      : 'Prices in US dollars. Choose Stripe or PayMaya when you order.') +
-    ' After you order, submit your payment reference under My Orders.</p>' +
-    filterBar() +
-    (list.length ? '' : '<p class="muted">No pupae available right now.</p>') +
-    '<div class="grid">' + list.map(function (l) {
-      return '<div class="card">' +
-        '<h3 style="margin:0">' + esc(short(l.sp)) + '</h3>' +
-        '<div class="small muted">From ' + esc(l.ownerOrg) + ' · ' + l.left + ' available · ' + esc(timeLeft(l.exp)) + '</div>' +
-        '<div class="price">' + showPrice(l.price, 'USD') + ' / pupa</div>' +
-        '<div class="row"><label style="margin:0">Qty <input id="bq_' + esc(l.id) + '" type="number" min="1" max="' + l.left + '" value="1" style="width:90px"></label></div>' +
-        '<label style="margin-top:6px">Payment method</label>' + payOptionsHtml(l.id) +
-        '<select id="bc_' + esc(l.id) + '">' + contractOpts + '</select>' +
-        '<button class="btn" onclick="orderBuyer(\'' + esc(l.id) + '\')">Order</button>' +
-        '</div>';
-    }).join('') + '</div></div>');
-}
-
-async function orderBuyer(id) {
-  try {
-    var oid = await rpc('placeOrder', token, id, $('bq_' + id).value, {
-      contractId: $('bc_' + id).value,
-      payMethod: $('pm_' + id).value
-    });
-    alert('Order ' + oid + ' placed. Pay as shown under My Orders, then submit the reference.');
-    await refresh(true);
-    go('orders');
-  } catch (e) { alertErr(e); }
-}
-
-// ===== ORDERS (all roles) =====
-function renderOrders() {
-  if (role() === 'breeder') {
-    paint('app', '<div class="panel"><h2>Supply orders from purchasers</h2>' +
-      '<p class="small muted">You see the purchaser\'s organization only, never their sale prices.</p>' +
-      orderTable(S.orders) + '</div>');
-    return;
-  }
-  if (role() === 'purchaser') {
-    paint('app', '<div class="panel"><h2>Supply orders (from breeders)</h2>' + orderTable(S.orders.filter(function (o) { return o.type === 'supply'; })) + '</div>' +
-      '<div class="panel"><h2>Sales to buyers</h2>' + orderTable(S.orders.filter(function (o) { return o.type === 'sale'; })) + '</div>');
-    return;
-  }
-  paint('app', '<div class="panel"><h2>My orders</h2>' + orderTable(S.orders) + '</div>');
-}
-
-function orderTable(list) {
-  if (!list.length) return '<p class="muted">No orders yet.</p>';
-  return '<div class="tw"><table><thead><tr><th>Order</th><th>Item</th><th>Qty</th><th>Amount due</th><th>Status</th><th>Party and tax</th><th>Action</th></tr></thead><tbody>' +
-    list.slice().sort(function (a, b) { return b.created - a.created; }).map(function (o) {
-      return '<tr>' +
-        '<td>' + esc(o.id) + '<br><span class="small muted">' + when(o.created) + '</span></td>' +
-        '<td>' + esc(short(o.sp)) + '<br><span class="tag">' + (o.type === 'supply' ? 'Supply' : 'Sale') + '</span></td>' +
-        '<td>' + o.qty + '</td>' +
-        '<td>' + money(o.amountDue || 0, o.payCurrency || 'PHP') + '<br><span class="small muted">' + esc(o.payMethod || '') + '</span></td>' +
-        '<td><span class="tag">' + esc(o.status) + '</span></td>' +
-        '<td class="small">' + counterpart(o) + (o.tax ? taxBlock(o) : '') + '</td>' +
-        '<td>' + orderActions(o) + '</td>' +
-        '</tr>';
-    }).join('') + '</tbody></table></div>';
-}
-
-function counterpart(o) {
-  var mine = o.seller === S.me.username;
-  var c = mine ? o.buyerContact : o.sellerContact;
-  if (!c) return '';
-  return '<div class="small">' + (mine ? 'Buyer' : 'Seller') + ': <b>' + esc(c.org || c.name || '') + '</b>' +
-    (c.address ? '<br>Address: ' + esc(c.address) : '') + (c.phone ? '<br>Phone: ' + esc(c.phone) : '') + '</div>';
-}
-
-function taxBlock(o) {
-  var t = o.tax;
-  if (o.seller === S.me.username) {
-    return '<div class="block">Subtotal ' + peso(t.subtotalPHP) + ' · VAT ' + peso(t.vat) + ' · % tax ' + peso(t.percentTax) + '<br>' +
-      'Platform fee ' + peso(t.platformFee) + ' + VAT ' + peso(t.platformVat) + '<br><b>Your net: ' + peso(t.sellerNet) + '</b>' +
-      (t.zeroRated ? '<br>Zero-rated export sale' : '') + '</div>';
-  }
-  return '<div class="block">Buyer total: ' + peso(t.buyerPays) + (t.vat ? ' (includes VAT ' + peso(t.vat) + ')' : '') + '</div>';
-}
-
-function payInstructions(o) {
-  var p = o.payTo || {};
-  if (o.payCode === 'STRIPE') {
-    return 'Pay <b>' + usd(o.amountDue) + '</b> by Stripe: <a href="' + esc(p.link || '#') + '" target="_blank" rel="noopener">open the payment link</a>, then enter the transaction ID from your receipt.';
-  }
-  if (o.payCode === 'PAYMAYA') {
-    return 'Send <b>' + money(o.amountDue, o.payCurrency) + '</b> by PayMaya to <b>' + esc(p.paymaya || '(not set)') + '</b>' +
-      (p.name ? ' · ' + esc(p.name) : '') + ', then enter the reference number from your receipt.';
-  }
-  return 'Send <b>' + peso(o.amountDue) + '</b> by GCash to <b>' + esc(p.gcash || '(not set)') + '</b>' +
-    (p.name ? ' · ' + esc(p.name) : '') + ', then enter the 10 to 13 digit reference number.';
-}
-
-function orderActions(o) {
-  var me = S.me.username;
-  var a = '';
-  if (o.buyer === me && o.status === 'Awaiting Payment') {
-    var ph = o.payCode === 'GCASH' ? 'GCash reference (10 to 13 digits)' : 'Reference or transaction ID';
-    a += '<div class="small">' + payInstructions(o) + '</div>' +
-      '<div class="row"><input id="ref_' + esc(o.id) + '" placeholder="' + ph + '" style="width:170px">' +
-      '<button class="btn" onclick="payOrder(\'' + esc(o.id) + '\')">Submit</button>' +
-      '<button class="btn sec" onclick="cancelOrder(\'' + esc(o.id) + '\')">Cancel</button></div>';
-  }
-  if (o.seller === me && o.status === 'Payment Submitted') {
-    a += '<div class="small">' + esc(o.payMethod || 'Payment') + ' ref: ' + esc(o.payRef) + '</div>' +
-      '<button class="btn" onclick="confirmPay(\'' + esc(o.id) + '\')">Confirm payment received</button>';
-  }
-  if (o.seller === me && o.type === 'sale' && o.status === 'Confirmed') {
-    a += '<button class="btn sec" onclick="deliver(\'' + esc(o.id) + '\')">Mark delivered</button>';
-  }
-  return a || '-';
-}
-
-async function payOrder(id) {
-  try { await rpc('submitOrderPayment', token, id, $('ref_' + id).value); await refresh(true); }
-  catch (e) { alertErr(e); }
-}
-
-async function cancelOrder(id) {
-  if (!confirm('Cancel this order?')) return;
-  try { await rpc('cancelOrder', token, id); await refresh(true); } catch (e) { alertErr(e); }
-}
-
-async function confirmPay(id) {
-  if (!confirm('Confirm that the payment arrived? This records tax and fees.')) return;
-  try { await rpc('confirmPayment', token, id); await refresh(true); } catch (e) { alertErr(e); }
-}
-
-async function deliver(id) {
-  try { await rpc('markDelivered', token, id); await refresh(true); } catch (e) { alertErr(e); }
-}
-
-// ===== BREEDER TOOLS =====
-function renderTools() {
-  paint('app', '<div class="panel"><h2>Breeder tools</h2>' +
-    '<p>Keep your listings accurate and compliant.</p>' +
-    '<div class="row"><button class="btn" onclick="go(\'fresh\')">Post pupae</button>' +
-    '<button class="btn sec" onclick="go(\'catalog\')">Prices and flood</button></div>' +
-    '<div class="block">Price changes while a species is flagged FLOOD take effect after the notice period.</div></div>' +
-    '<div class="panel"><h2>AI classification</h2>' +
-    '<p class="small muted">Quality checks for stock are done by the purchaser on the AI Quality Check screen.</p></div>');
-}
-
-// ===== PURCHASER: BREEDER CATALOG & STOCK =====
-function renderSupply() {
-  var list = catalogList();
-  paint('app', '<div class="panel"><h2>Breeder catalog</h2>' +
-    '<p class="small muted">Prices in pesos. Supply orders are paid to the breeder by GCash. Enter the US dollar price you will sell to buyers. Breeder prices are never shown to buyers.</p>' +
-    filterBar() +
-    (list.length ? '' : '<p class="muted">No fresh pupae available right now.</p>') +
-    '<div class="grid">' + list.map(function (l) {
-      return '<div class="card">' +
-        '<h3 style="margin:0">' + esc(short(l.sp)) + '</h3>' +
-        '<div class="small muted">From ' + esc(l.ownerOrg) + ' · ' + l.left + ' available · ' + esc(timeLeft(l.exp)) + '</div>' +
-        '<div class="price">' + peso(l.price) + ' / pupa</div>' +
-        '<div class="row"><label style="margin:0">Qty <input id="sq_' + esc(l.id) + '" type="number" min="1" max="' + l.left + '" value="1" style="width:80px"></label></div>' +
-        '<div class="row"><label style="margin:0">Your USD price to buyers <input id="su_' + esc(l.id) + '" type="number" min="0.01" step="0.01" style="width:110px"></label></div>' +
-        '<button class="btn" onclick="orderSupply(\'' + esc(l.id) + '\')">Order from breeder</button>' +
-        '</div>';
-    }).join('') + '</div></div>');
-}
-
-async function orderSupply(id) {
-  try {
-    var oid = await rpc('placeOrder', token, id, $('sq_' + id).value, { salePriceUSD: $('su_' + id).value });
-    alert('Order ' + oid + ' placed. Pay the breeder by GCash, then submit the reference under Orders.');
-    await refresh(true);
-    go('orders');
-  } catch (e) { alertErr(e); }
-}
-
-function renderStock() {
-  var rows = S.lots.slice().sort(function (a, b) { return b.created - a.created; }).map(function (l) {
-    var status = l.grade === 'pending' ? 'Awaiting grading'
-      : l.grade === 'rejected' ? 'Rejected, hidden from buyers'
-      : !liveOk(l) ? 'Expired or sold out'
-      : (l.active ? 'Live for buyers, ' + timeLeft(l.exp) : 'Off');
-    var tog = l.grade === 'good' && liveOk(l)
-      ? '<button class="btn sec" onclick="toggleListing(\'' + esc(l.id) + '\',' + (!l.active) + ')">' + (l.active ? 'Disable' : 'Enable') + '</button>' : '';
-    return '<tr><td>' + esc(short(l.sp)) + '</td><td>' + l.left + ' / ' + l.qty + '</td>' +
-      '<td><input id="up_' + esc(l.id) + '" type="number" min="0.01" step="0.01" value="' + (l.price || '') + '" style="width:100px"> ' +
-      '<button class="btn sec" onclick="setUsd(\'' + esc(l.id) + '\')">Save</button></td>' +
-      '<td><span class="tag">' + esc(l.grade) + '</span></td><td>' + esc(status) + '</td><td>' + tog + '</td></tr>';
-  }).join('');
-  paint('app', '<div class="panel"><h2>My stock from breeders</h2>' +
-    '<p class="small muted">Stock is visible to buyers only after it is graded good and enabled. Set your US dollar price, then enable the listing.</p>' +
-    '<div class="tw">' + (S.lots.length
-      ? '<table><thead><tr><th>Species</th><th>Left / received</th><th>Your USD price</th><th>Grade</th><th>Status</th><th></th></tr></thead><tbody>' + rows + '</tbody></table>'
-      : '<p class="muted">No stock yet. Stock appears after a supply order is confirmed.</p>') +
-    '</div></div>');
-}
-
-async function setUsd(id) {
-  try { await rpc('setListingPrice', token, id, $('up_' + id).value); await refresh(true); }
-  catch (e) { alertErr(e); }
-}
-
-function renderAi() {
-  paint('app', '<div class="panel"><h2>Quality check (AI or manual)</h2>' +
-    '<p class="small muted">Only good stock is offered to buyers. Each check is recorded in the audit trail.</p>' +
-    (S.lots.length ? '' : '<p class="muted">No stock to check.</p>') +
-    '<div class="tw"><table><thead><tr><th>Species</th><th>Left</th><th>Grade</th><th>Source</th><th>Note</th><th>Check</th></tr></thead><tbody>' +
-    S.lots.map(function (l) {
-      return '<tr><td>' + esc(short(l.sp)) + '</td><td>' + l.left + '</td>' +
-        '<td><span class="tag ' + (l.grade === 'rejected' ? 'warn' : '') + '">' + esc(l.grade) + '</span></td>' +
-        '<td class="small">' + esc(l.qcSource || '-') + '</td><td class="small">' + esc(l.qcNote || '') + '</td>' +
-        '<td>' + (l.grade === 'pending'
-          ? '<button class="btn" onclick="grade(\'' + esc(l.id) + '\',\'good\')">Good</button> ' +
-            '<button class="btn warn" onclick="grade(\'' + esc(l.id) + '\',\'rejected\')">Reject</button><br>' +
-            '<input type="file" accept="image/*" onchange="aiCheck(\'' + esc(l.id) + '\',this)" style="margin-top:4px">'
-          : '-') + '</td></tr>';
-    }).join('') + '</tbody></table></div></div>');
-}
-
-async function grade(id, g) {
-  var note = g === 'rejected' ? (prompt('Reason for rejection (optional):') || '') : '';
-  try { await rpc('setGrade', token, id, g, note); await refresh(true); }
-  catch (e) { alertErr(e); }
-}
-
-async function aiCheck(id, input) {
-  var f = input.files[0];
-  if (!f) return;
-  try {
-    var g = await rpc('classifyListing', token, id, await readFile(f));
-    alert('AI result: ' + g);
-    await refresh(true);
-  } catch (e) { alertErr(e); }
-}
-
-// ===== CONTRACTS =====
-function renderContracts() {
-  var propose = role() === 'purchaser' ? '<div class="panel"><h2>Propose a monthly contract</h2>' +
-    '<p class="small muted">A buyer agrees to a monthly minimum of live pupae. The system shows any monthly shortfall. No automatic penalty is applied.</p>' +
-    '<div class="form">' +
-    '<div><label>Buyer username</label><input id="cBuyer"></div>' +
-    '<div><label>Monthly minimum (pupae)</label><input id="cMin" type="number" min="1"></div>' +
-    '<div><label>Species (optional)</label><select id="cSp"><option value="">Any</option>' +
-    S.species.map(function (s) { return '<option value="' + esc(s) + '">' + esc(short(s)) + '</option>'; }).join('') +
-    '</select></div>' +
-    '<div><label>Start</label><input id="cStart" type="date"></div>' +
-    '<div><label>End</label><input id="cEnd" type="date"></div>' +
-    '</div><p class="note" id="cMsg"></p>' +
-    '<button class="btn" onclick="proposeContract()">Send proposal</button></div>' : '';
-  paint('app', propose + '<div class="panel"><h2>Contracts</h2>' + contractTable() + '</div>');
-}
-
-function contractTable() {
-  if (!S.contracts.length) return '<p class="muted">No contracts yet.</p>';
-  return '<div class="tw"><table><thead><tr><th>ID</th><th>Party</th><th>Monthly min</th><th>This month</th><th>Shortfall</th><th>Term</th><th>Status</th><th></th></tr></thead><tbody>' +
-    S.contracts.map(function (c) {
-      var shortQty = Math.max(0, c.monthlyMinQty - c.monthQty);
-      var isBuyer = c.buyer === S.me.username;
-      var party = isBuyer ? c.purchaser : c.buyer;
-      var accept = c.status === 'proposed' && isBuyer ? '<button class="btn" onclick="acceptContract(\'' + esc(c.id) + '\')">Accept</button> ' : '';
-      var end = c.status === 'active' ? '<button class="btn sec" onclick="endContract(\'' + esc(c.id) + '\')">End</button>' : '';
-      return '<tr><td>' + esc(c.id) + '</td><td>' + esc(party) + '</td><td>' + c.monthlyMinQty + '</td><td>' + c.monthQty + '</td>' +
-        '<td>' + (shortQty ? '<span class="tag warn">' + shortQty + ' short</span>' : '<span class="tag">Met</span>') + '</td>' +
-        '<td class="small">' + esc(c.startDate) + ' to ' + esc(c.endDate) + '</td><td>' + esc(c.status) + '</td>' +
-        '<td>' + accept + end + '</td></tr>';
-    }).join('') + '</tbody></table></div>';
-}
-
-async function proposeContract() {
-  var m = $('cMsg');
-  try {
-    await rpc('proposeContract', token, $('cBuyer').value, $('cMin').value, $('cStart').value, $('cEnd').value, $('cSp').value);
-    m.className = 'ok';
-    m.textContent = 'Proposal sent.';
-    await refresh(true);
-  } catch (e) { m.className = 'note'; m.textContent = e.message; }
-}
-
-async function acceptContract(id) {
-  try { await rpc('acceptContract', token, id); await refresh(true); } catch (e) { alertErr(e); }
-}
-
-async function endContract(id) {
-  if (!confirm('End this contract?')) return;
-  try { await rpc('endContract', token, id); await refresh(true); } catch (e) { alertErr(e); }
-}
-
-// ===== AUDIT & PROFILE =====
-async function renderAudit() {
-  paint('app', '<div class="panel"><h2>Audit trail</h2><p class="muted">Loading…</p></div>');
-  try {
-    var list = await rpc('getAudit', token);
-    paint('app', '<div class="panel"><h2>Audit trail</h2>' +
-      '<p class="small muted">Your actions and actions on your records, newest first.</p>' +
-      '<div class="tw"><table><thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Detail</th></tr></thead><tbody>' +
-      (list.map(function (a) {
-        return '<tr><td>' + when(a.time) + '</td><td>' + esc(a.actor) + '</td><td>' + esc(a.action) + '</td><td class="small">' + esc(a.detail) + '</td></tr>';
-      }).join('') || '<tr><td colspan="4" class="muted">No entries.</td></tr>') +
-      '</tbody></table></div></div>');
-  } catch (e) { paint('app', '<div class="panel note">' + esc(e.message) + '</div>'); }
-}
-
-function renderProfile() {
-  var m = S.me;
-  var seller = m.role === 'breeder' || m.role === 'purchaser';
-  paint('app', '<div class="panel"><h2>Edit profile</h2><div class="form">' +
-    '<div><label>Full name</label><input id="pName" value="' + esc(m.name) + '"></div>' +
-    '<div><label>Phone</label><input id="pPhone" value="' + esc(m.phone) + '"></div>' +
-    '<div><label>Email</label><input id="pEmail" value="' + esc(m.email) + '"></div>' +
-    '<div><label>Organization</label><input id="pOrg" value="' + esc(m.org) + '"></div>' +
-    '<div><label>Address</label><input id="pAddr" value="' + esc(m.address) + '"></div>' +
-    '<div><label>Country</label><select id="pCountry" onchange="countryChanged(\'p\')">' + countryOptions(m.country) + '</select>' +
-    '<small id="pCurHint" class="muted"></small></div>' +
-    (seller
-      ? '<div><label>GCash number (receives local payments)</label><input id="pGcash" value="' + esc(m.gcash) + '"></div>' +
-        '<div><label>PayMaya number or link</label><input id="pPaymaya" value="' + esc(m.paymaya) + '"></div>' +
-        '<div><label>Stripe payment link (for foreign buyers)</label><input id="pStripe" value="' + esc(m.stripe) + '" placeholder="https://buy.stripe.com/..."></div>'
-      : '') +
-    '</div><p class="small muted">Username: ' + esc(m.username) + ' · KYC: ' + esc(m.kyc) + '</p>' +
-    '<p class="note" id="pMsg"></p><button class="btn" onclick="saveProfile()">Save profile</button></div>');
-  countryChanged('p');
-}
-
-async function saveProfile() {
-  var body = {
-    name: $('pName').value, phone: $('pPhone').value, email: $('pEmail').value,
-    org: $('pOrg').value, address: $('pAddr').value, country: $('pCountry').value
-  };
-  if ($('pGcash')) {
-    body.gcash = $('pGcash').value;
-    body.paymaya = $('pPaymaya').value;
-    body.stripe = $('pStripe').value;
-  }
-  try {
-    S.me = await rpc('updateProfile', token, body);
-    $('pMsg').className = 'ok';
-    $('pMsg').textContent = 'Saved.';
-    await refresh(true);
-  } catch (e) { $('pMsg').className = 'note'; $('pMsg').textContent = e.message; }
-}
-
-window.APP_READY = true;
-</script>
+  <!-- Floating Chatbot Widget -->
+  <div class="fixed bottom-5 right-5 z-50">
+    <button id="chatToggle" class="bg-emerald-700 hover:bg-emerald-800 text-white p-3.5 rounded-full shadow-lg flex items-center justify-center transition">
+      💬
+    </button>
+    <div id="chatWindow" class="hidden flex-col bg-white rounded-xl shadow-2xl border border-slate-200 w-80 h-96 absolute bottom-16 right-0 overflow-hidden">
+      <div class="bg-emerald-800 text-white p-3 font-bold text-sm flex justify-between items-center">
+        <span>Butterfly Assistant (AI)</span>
+        <button onclick="toggleChat()" class="text-emerald-200 hover:text-white">&times;</button>
+      </div>
+      <div id="chatMessages" class="flex-grow p-3 overflow-y-auto bg-slate-50 space-y-2"></div>
+      <div class="p-2 border-t border-slate-200 flex bg-white">
+        <input type="text" id="chatInput" placeholder="Ask about species, prices, KYC..." class="flex-grow border rounded-l-md px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-600">
+        <button id="chatSend" onclick="sendChat()" class="bg-emerald-700 text-white px-4 py-1.5 rounded-r-md text-sm font-semibold hover:bg-emerald-800">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-slate-100 border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <p>&copy; 2026 LepVision Marinduque Butterfly Industry Exchange Platform. All rights reserved.</p>
+  </footer>
+
+  <!-- Core Client-Side Logic & RPC Engine -->
+  <script>
+    const $ = id => document.getElementById(id);
+    let authToken = localStorage.getItem('lepvision_token') || '';
+    let currentState = null;
+
+    // Google Apps Script Web App Endpoint URL (Automatically resolves current deployment URL)
+    const APP_URL = window.location.href.split('?')[0];
+
+    async function rpc(fn, ...args) {
+      try {
+        const res = await fetch(APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ fn, args })
+        });
+        const json = await res.json();
+        if (json.error) throw new Error(json.error);
+        return json.result;
+      } catch (err) {
+        alert('Error: ' + err.message);
+        throw err;
+      }
+    }
+
+    async function loadState() {
+      if (!authToken) {
+        renderAuthView();
+        return;
+      }
+      try {
+        currentState = await rpc('getState', authToken);
+        renderAppView();
+      } catch (e) {
+        localStorage.removeItem('lepvision_token');
+        authToken = '';
+        renderAuthView();
+      }
+    }
+
+    // --- VIEW RENDERERS ---
+
+    function renderAuthView() {
+      $('navLinks').innerHTML = '';
+      $('appRoot').innerHTML = `
+        <div class="max-w-md mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-8">
+          <div class="text-center mb-6">
+            <span class="text-4xl">🦋</span>
+            <h2 class="text-2xl font-bold text-slate-900 mt-2">Welcome to LepVision</h2>
+            <p class="text-sm text-slate-500">Marinduque Butterfly Production & Exchange</p>
+          </div>
+          
+          <div id="authError" class="hidden mb-4 p-3 bg-red-50 text-red-700 text-xs rounded-lg"></div>
+
+          <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+            <div id="regFields" class="hidden space-y-4">
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Account Role</label>
+                <select id="regRole" class="w-full border rounded-lg p-2.5 text-sm bg-white">
+                  <option value="purchaser">Purchaser (Buying from Breeders)</option>
+                  <option value="buyer">Buyer / Exporter</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Full Name</label>
+                <input type="text" id="regName" class="w-full border rounded-lg p-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Organization / Farm</label>
+                <input type="text" id="regOrg" class="w-full border rounded-lg p-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Phone Number</label>
+                <input type="text" id="regPhone" placeholder="09171234567" class="w-full border rounded-lg p-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Country</label>
+                <input type="text" id="regCountry" value="PH" class="w-full border rounded-lg p-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Address</label>
+                <textarea id="regAddr" rows="2" class="w-full border rounded-lg p-2.5 text-sm"></textarea>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Username</label>
+              <input type="text" id="authUsername" required class="w-full border rounded-lg p-2.5 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Password</label>
+              <input type="password" id="authPassword" required class="w-full border rounded-lg p-2.5 text-sm">
+            </div>
+
+            <button type="submit" id="authSubmitBtn" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 rounded-lg text-sm transition">
+              Log In
+            </button>
+          </form>
+
+          <div class="mt-6 text-center">
+            <button onclick="toggleAuthMode()" id="authModeToggle" class="text-xs text-emerald-700 hover:underline font-medium">
+              Need an account? Register here
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    let isRegisterMode = false;
+    function toggleAuthMode() {
+      isRegisterMode = !isRegisterMode;
+      $('regFields').classList.toggle('hidden', !isRegisterMode);
+      $('authSubmitBtn').innerText = isRegisterMode ? 'Register Account' : 'Log In';
+      $('authModeToggle').innerText = isRegisterMode ? 'Already have an account? Log In' : 'Need an account? Register here';
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const u = $('authUsername').value.trim();
+      const p = $('authPassword').value;
+      const errBox = $('authError');
+      errBox.classList.add('hidden');
+
+      try {
+        if (isRegisterMode) {
+          const res = await rpc('login', $('regRole').value, u, p, {
+            mode: 'register',
+            name: $('regName').value,
+            org: $('regOrg').value,
+            phone: $('regPhone').value,
+            country: $('regCountry').value,
+            addr: $('regAddr').value
+          });
+          if (!res.ok) throw new Error(res.msg);
+          authToken = res.token;
+        } else {
+          const res = await rpc('login', 'purchaser', u, p, { mode: 'login' });
+          if (!res.ok) throw new Error(res.msg);
+          authToken = res.token;
+        }
+        localStorage.setItem('lepvision_token', authToken);
+        loadState();
+      } catch (err) {
+        errBox.innerText = err.message;
+        errBox.classList.remove('hidden');
+      }
+    }
+
+    async function handleLogout() {
+      await rpc('logout', authToken);
+      authToken = '';
+      localStorage.removeItem('lepvision_token');
+      loadState();
+    }
+
+    function renderAppView() {
+      const me = currentState.me;
+      $('navLinks').innerHTML = `
+        <span class="text-xs bg-emerald-900 px-3 py-1 rounded-full font-medium">Role: ${me.role.toUpperCase()}</span>
+        <span class="text-sm font-semibold">${me.org || me.name}</span>
+        <button onclick="handleLogout()" class="bg-emerald-700 hover:bg-emerald-900 px-3 py-1.5 rounded-md text-xs font-semibold">Logout</button>
+      `;
+
+      if (me.kyc !== 'verified') {
+        renderKycNotice(me);
+        return;
+      }
+
+      // Render Marketplace or Dashboard based on role
+      $('appRoot').innerHTML = `
+        <div class="space-y-6">
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex justify-between items-center">
+            <div>
+              <h1 class="text-xl font-bold text-slate-900">Welcome, ${me.name}</h1>
+              <p class="text-xs text-slate-500">Accredited ${me.role} dashboard & live trading exchange.</p>
+            </div>
+            <div class="text-right text-xs text-slate-600">
+              <p>USD Rate: ₱${currentState.rate}</p>
+              <p class="font-semibold text-emerald-700">Status: Verified Breeder / Trader</p>
+            </div>
+          </div>
+
+          <!-- Active Catalog / Lots Section -->
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <h2 class="text-lg font-bold text-slate-800 mb-4">Available Butterfly Pupae Catalog</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="catalogGrid">
+              ${currentState.catalog.length === 0 ? '<p class="text-xs text-slate-500 col-span-full">No active pupae lots available right now.</p>' : ''}
+              ${currentState.catalog.map(l => `
+                <div class="border rounded-lg p-4 flex flex-col justify-between bg-slate-50">
+                  <div>
+                    <h3 class="font-bold text-emerald-800">${l.sp.replace('Butterfly-', '')}</h3>
+                    <p class="text-xs text-slate-600">Supplier: ${l.ownerOrg}</p>
+                    <p class="text-sm font-extrabold mt-2">₱${l.price} / pupa</p>
+                    <p class="text-xs text-slate-500 mt-1">Available Stock: ${l.left} units</p>
+                  </div>
+                  <button onclick="placeOrderPrompt('${l.id}', ${l.left}, ${l.price})" class="mt-4 bg-emerald-700 hover:bg-emerald-800 text-white py-1.5 rounded-md text-xs font-semibold">
+                    Place Order
+                  </button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderKycNotice(me) {
+      $('appRoot').innerHTML = `
+        <div class="max-w-xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-8 text-center space-y-4">
+          <span class="text-4xl">⏳</span>
+          <h2 class="text-xl font-bold text-slate-900">KYC Verification Required</h2>
+          <p class="text-sm text-slate-600">Your account (${me.role}) is currently awaiting document verification before you can participate in pupae exchange.</p>
+          <div class="p-4 bg-amber-50 text-amber-800 text-xs rounded-lg text-left">
+            <p class="font-bold mb-1">Required Documents:</p>
+            <ul class="list-disc pl-4 space-y-1">
+              ${me.role === 'breeder' ? '<li>Government ID</li><li>DENR / Farm Permit</li>' : ''}
+              ${me.role === 'purchaser' ? '<li>Government ID</li><li>Business License</li>' : ''}
+              ${me.role === 'buyer' ? '<li>Government ID</li>' : ''}
+            </ul>
+          </div>
+          <button onclick="handleLogout()" class="mt-4 bg-slate-200 hover:bg-slate-300 px-4 py-2 rounded-lg text-xs font-semibold text-slate-700">Sign Out</button>
+        </div>
+      `;
+    }
+
+    async function placeOrderPrompt(listingId, maxQty, price) {
+      const q = prompt(`Enter quantity to order (Max ${maxQty}):`, '10');
+      if (!q) return;
+      const qty = parseInt(q, 10);
+      if (isNaN(qty) || qty <= 0 || qty > maxQty) {
+        alert('Invalid quantity.');
+        return;
+      }
+      try {
+        const orderId = await rpc('placeOrder', authToken, listingId, qty, { payMethod: 'GCash' });
+        alert('Order successfully placed! Order ID: ' + orderId);
+        loadState();
+      } catch (err) {
+        alert('Failed to place order: ' + err.message);
+      }
+    }
+
+    // --- CHATBOT WIDGET LOGIC ---
+    let chatBusy = false;
+
+    function toggleChat() {
+      const w = $('chatWindow');
+      const open = w.style.display === 'flex';
+      w.style.display = open ? 'none' : 'flex';
+      if (!open) setTimeout(() => $('chatInput').focus(), 0);
+    }
+
+    function addMessage(sender, msg, mine) {
+      const div = document.createElement('div');
+      div.className = 'chat-msg' + (mine ? ' me' : '');
+      div.innerHTML = `<div class="who">${sender}:</div><div>${msg}</div>`;
+      const box = $('chatMessages');
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+      return div;
+    }
+
+    async function sendChat() {
+      if (chatBusy) return;
+      const input = $('chatInput');
+      const msg = input.value.trim();
+      if (!msg) return;
+      input.value = '';
+      addMessage('Visitor', msg, true);
+      const pending = addMessage('Butterfly Assistant', '…');
+      chatBusy = true;
+      $('chatSend').disabled = true;
+      try {
+        const reply = await rpc('chatbotReply', msg);
+        pending.lastChild.textContent = String(reply || 'Sorry, I have no answer for that.');
+      } catch (e) {
+        pending.lastChild.textContent = 'Sorry, the assistant is unavailable right now.';
+      } finally {
+        chatBusy = false;
+        $('chatSend').disabled = false;
+        input.focus();
+      }
+    }
+
+    $('chatToggle').addEventListener('click', toggleChat);
+    $('chatInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
+
+    // Initial boot
+    addMessage('Butterfly Assistant', 'Hi! Ask me about species, prices, or how to order.');
+    loadState();
+  </script>
 </body>
 </html>
